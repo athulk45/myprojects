@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="book_tree" model="ir.ui.view">
+        <field name="name">book.reservation.tree</field>
+        <field name="model">book.reservation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="reservation_seq"/>
+                <field name="scholar_id"/>
+                <field name="responsible_id"/>
+                <field name="book_ids"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="book_search" model="ir.ui.view">
+        <field name="name">book.reservation.search</field>
+        <field name="model">book.reservation</field>
+        <field name="arch" type="xml">
+            <search string="Scholar">
+                <filter string="Rejected" name="rejected" domain="[('state','=','rejected')]"/>
+                <group expand="1" string="Group By">
+                    <filter name="scholar"
+                            context="{'group_by': 'scholar_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="book_form" model="ir.ui.view">
+        <field name="name">book.reservation.form</field>
+        <field name="model">book.reservation</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button id="button_confirm" name="action_submit"
+                            string="Submit" class="btn-primary" type="object"
+                            states="new"/>
+                    <button id="button_approve" name="action_approve"
+                            string="Approve" class="btn-primary" type="object"
+                            states="approval"
+                            groups="reserarch_management.group_scholar_manager"/>
+                    <button id="button_reject" name="action_reject"
+                            string="Reject" type="object"
+                            states="approval,approved"
+                            groups="reserarch_management.group_scholar_manager"/>
+                    <button id="button_done" name="action_cancel"
+                            string="Cancel"
+                            type="object" states="new,approval"/>
+                    <button id="button_invoice" name="action_invoice"
+                            string="Create Invoice" type="object"
+                            states="approved"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reservation_seq"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="scholar_id"/>
+                        </group>
+                        <group>
+                            <field name="responsible_id"/>
+                        </group>
+                    </group>
+                    <field name="book_ids" domain="[('book_ok','=',True)]"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="sale_order_view_inherited" model="ir.ui.view">
+        <field name="name">sale.order.inherited</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='prime']"
+                   position="after">
+                <field name="reservation_id"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="product_template_book_form_view_inherited" model="ir.ui.view">
+        <field name="name">product.template.inherited</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_ok']" position="before">
+                <field name="book_ok"/>
+                <label for="book_ok" string="Is Book"/>
+                <br/>
+            </xpath>
+        </field>
+    </record>
+    <record id="book_action" model="ir.actions.act_window">
+        <field name="name">Book Reservation</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">book.reservation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Book Reservation!
+            </p>
+        </field>
+    </record>
+    <!--    <menuitem id="book_reservation_root"
+                  name="Book Reservation"
+                  parent="menu_research_management_root"
+                  sequence="2"/>-->
+    <menuitem id="book_reservation"
+              name="Book Reservation"
+              parent="research_management_root"
+              action="book_action"
+              sequence="2"/>
+</odoo>

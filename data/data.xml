@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="seq_scholar" model="ir.sequence">
+            <field name="name">Scholar Sequence</field>
+            <field name="code">research.scholar</field>
+            <field name="prefix">SCH</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+        <data>
+        <record id="seq_book_reservation" model="ir.sequence">
+            <field name="name">Reservation Sequence</field>
+            <field name="code">book.reservation</field>
+            <field name="prefix">BRSV</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>
