@@ -14,8 +14,11 @@
     'depends' : ['sale',]
     ,
     'data': ['security/ir.model.access.csv',
-            'security/material_security.xml',
-             'views/material_request.xml'],
+             'security/material_security.xml',
+             'wizard/import_record.xml',
+             'views/material_request.xml',
+             'views/product_inherited.xml',
+             ],
     'demo': [],
     'installable': True,
     'application': True,

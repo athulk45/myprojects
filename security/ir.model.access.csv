@@ -1,7 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_material,access.material,model_material,,1,1,1,1
 access_material_order_line,access.material.order.line,model_material_order_line,,1,1,1,1
-
+access_import_record,access.import.record,model_import_record,,1,1,1,1
 
 
 
