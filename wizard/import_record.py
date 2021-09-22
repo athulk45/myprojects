@@ -40,8 +40,10 @@ class ImportRecord(models.TransientModel):
 
                             elif pdt.tracking == "lot":
                                 print(pdt.tracking)
-                            lot = self.env['stock.move.line'].\
-                                search([('lot_name', '=', row_values[2])],limit=1)
+                                print(row_values[2])
+                            lot = self.env['stock.move.line']. \
+                                search([('move_line_nosuggest_ids.lot_name', '=', row_values[2])],
+                                       limit=1)
                             print(lot)
                             if lot:
                                 print("exist")
