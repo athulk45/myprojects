@@ -7,7 +7,6 @@
             <form string="Import Record">
                 <group class="oe_title">
                     <field name="file"/>
-
                 </group>
                 <footer>
                     <button name="import_lot" string="Submit"

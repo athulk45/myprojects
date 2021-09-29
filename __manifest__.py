@@ -11,7 +11,7 @@
                 'images/cash_register.jpeg',
                 'images/chart_of_accounts.jpeg',
                 'images/customer_invoice.jpeg','images/journal_entries.jpeg'],
-    'depends' : ['sale',]
+    'depends' : ['sale','stock','base']
     ,
     'data': ['security/ir.model.access.csv',
              'security/material_security.xml',

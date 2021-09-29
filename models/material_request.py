@@ -16,6 +16,12 @@ class Material(models.Model):
 
     def action_request(self):
         self.state = 'to_approve'
+
+    def action_approve_manager(self):
+        self.state = '2nd_approval'
+
+    def action_approve_head(self):
+        self.state = 'approved'
         products = []
         seller = []
         for rec in self.material_line_ids:
@@ -43,12 +49,6 @@ class Material(models.Model):
                     purchase_vals['order_line'].append((0, 0, purchase_order))
             print(purchase_vals)
             self.purchase_id = self.env['purchase.order'].create(purchase_vals)
-
-    def action_approve_manager(self):
-        self.state = '2nd_approval'
-
-    def action_approve_head(self):
-        self.state = 'approved'
 
     def action_reject_head(self):
         self.state = 'rejected'
