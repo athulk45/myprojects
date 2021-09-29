@@ -17,6 +17,8 @@
              'security/scholar_security.xml',
              'views/scholar_view.xml',
              'views/book_view.xml',
+             'report/report.xml',
+             'report/book_reservation_template.xml',
              ],
     'demo': [],
     'installable': True,

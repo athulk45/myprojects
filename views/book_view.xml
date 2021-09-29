@@ -65,7 +65,14 @@
                             <field name="responsible_id"/>
                         </group>
                     </group>
-                    <field name="book_ids" domain="[('book_ok','=',True)]"/>
+                    <field name="book_ids">
+                        <tree editable="bottom">
+                            <field name="product_id"
+                                   domain="[('book_ok','=',True)]"/>
+                            <field name="default_code"/>
+                            <field name="unit_price"/>
+                        </tree>
+                    </field>
                 </sheet>
             </form>
         </field>

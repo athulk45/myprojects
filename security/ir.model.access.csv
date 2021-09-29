@@ -2,5 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_research_scholar,access.research.scholar,model_research_scholar,,1,1,1,1
 access_research_institute,access.research.institute,model_research_institute,,1,1,1,1
 access_book_reservation,access.book.reservation,model_book_reservation,,1,1,1,1
-
-
+access_book_order_line,access.book.order.line,model_book_order_line,,1,1,1,1

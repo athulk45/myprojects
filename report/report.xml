@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="report_book_reservation" model="ir.actions.report">
+        <field name="name">Reservation</field>
+        <field name="model">book.reservation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">reserarch_management.report_book_reservation</field>
+        <field name="report_file">reserarch_management.report_book_reservation</field>
+        <field name="binding_model_id" ref="model_book_reservation"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
