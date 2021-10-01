@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_reservation">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <center>
+                            <h2>Reserved List</h2>
+                             <t t-if="form.get('customer_ids')">
+                                <h6>
+                                    <t t-esc="form['customer_id'][1]"/>
+                                </h6>
+                            </t>
+                            <t t-if="form.get('from_date') and form.get('to_date')">
+                                <table>
+                                    <tr>
+                                        <td>From Date:</td>
+                                        <td><t t-esc="form['from_date']"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>To Date:</td>
+                                        <td><t t-esc="form['to_date']"/></td>
+                                    </tr>
+                                </table>
+                            </t>
+                            <t t-if="not form.get('from_date') and not form.get('to_date')">
+                                <label>Date</label>
+                                <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/>
+                            </t>
+                        </center>
+                    </div>
+                </t>
+            </t>
+    </template>
+</odoo>

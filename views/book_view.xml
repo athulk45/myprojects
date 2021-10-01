@@ -120,4 +120,14 @@
               parent="research_management_root"
               action="book_action"
               sequence="2"/>
+    <menuitem id="report_research_management"
+            name="Report"
+            parent="menu_research_management_root"
+            sequence="2"/>
+    <menuitem id="reservation_report"
+            name="Reservation"
+            parent="report_research_management"
+            action="reservation_report_action"
+            sequence="2"/>
+
 </odoo>

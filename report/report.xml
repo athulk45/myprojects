@@ -9,4 +9,13 @@
         <field name="binding_model_id" ref="model_book_reservation"/>
         <field name="binding_type">report</field>
     </record>
+    <record id="action_report_reservation" model="ir.actions.report">
+        <field name="name">Reservation</field>
+        <field name="model">reservation.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">reserarch_management.report_reservation</field>
+        <field name="report_file">reserarch_management.report_reservation</field>
+        <field name="binding_model_id" ref="model_reservation_report"/>
+        <field name="binding_type">report</field>
+    </record>
 </odoo>
