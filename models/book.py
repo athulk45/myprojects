@@ -112,10 +112,7 @@ class BookOrderLine(models.Model):
 
     product_id = fields.Many2one('product.product')
     unit_price = fields.Float(string="Price",
-                             related='product_id.lst_price')
+                              related='product_id.lst_price')
     book_id = fields.Many2one('book.reservation')
     default_code = fields.Char(string="Internal Reference",
-                             related='product_id.default_code')
-
-
-
+                               related='product_id.default_code')

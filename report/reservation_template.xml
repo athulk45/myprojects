@@ -6,7 +6,7 @@
                     <div class="page">
                         <center>
                             <h2>Reserved List</h2>
-                             <t t-if="form.get('customer_ids')">
+                             <t t-if="form.get('customer_id')">
                                 <h6>
                                     <t t-esc="form['customer_id'][1]"/>
                                 </h6>
@@ -28,6 +28,194 @@
                                 <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/>
                             </t>
                         </center>
+                            <t t-if="form.get('customer_id') and not form.get('from_date') and not form.get('to_date')">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl.No</th>
+                                            <th>Reference</th>
+                                            <th>Book</th>
+                                            <th>Reserved Date</th>
+                                            <th>Status</th>
+                                            <th>1</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="slno" t-value="0"/>
+                                        <tr t-foreach="record" t-as="rec">
+                                            <td>
+                                                <t t-set="slno" t-value="slno + 1"/>
+                                                <t t-esc="slno"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['reservation_seq']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['name']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['create_date']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['state']"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
+                            <t t-if="form.get('from_date') and form.get('to_date') and not form.get('customer_id') and not form.get('book_ids')">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl.No</th>
+                                            <th>Reference</th>
+                                            <th>Book</th>
+                                            <th>Reserved Date</th>
+                                            <th>Customer</th>
+                                            <th>Status</th>
+                                            <th>2</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="slno" t-value="0"/>
+                                        <tr t-foreach="record" t-as="rec">
+                                            <td>
+                                                <t t-set="slno" t-value="slno + 1"/>
+                                                <t t-esc="slno"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['reservation_seq']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['name']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['create_date']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['display_name']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['state']"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
+                            <t t-if="form.get('from_date') and form.get('to_date') and form.get('book_ids')">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl.No</th>
+                                            <th>Reference</th>
+                                            <th>Book</th>
+                                            <th>Reserved Date</th>
+                                            <th>Customer</th>
+                                            <th>Status</th>
+                                            <th>3</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="slno" t-value="0"/>
+                                        <tr t-foreach="record" t-as="rec">
+                                            <td>
+                                                <t t-set="slno" t-value="slno + 1"/>
+                                                <t t-esc="slno"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['reservation_seq']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['name']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['create_date']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['display_name']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['state']"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
+                            <t t-if="form.get('book_ids') and not form.get('from_date') and not form.get('to_date')">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl.No</th>
+                                            <th>Reference</th>
+                                            <th>Book</th>
+                                            <th>Reserved Date</th>
+                                            <th>Customer</th>
+                                            <th>Status</th>
+                                            <th>4</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="slno" t-value="0"/>
+                                        <tr t-foreach="record" t-as="rec">
+                                            <td>
+                                                <t t-set="slno"
+                                                   t-value="slno + 1"/>
+                                                <t t-esc="slno"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['reservation_seq']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['name']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['create_date']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['display_name']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['state']"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
+                            <t t-if="form.get('from_date') and form.get('to_date') and form.get('customer_id')">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl.No</th>
+                                            <th>Reference</th>
+                                            <th>Book</th>
+                                            <th>Reserved Date</th>
+                                            <th>Status</th>
+                                            <th>5</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="slno" t-value="0"/>
+                                        <tr t-foreach="record" t-as="rec">
+                                            <td>
+                                                <t t-set="slno" t-value="slno + 1"/>
+                                                <t t-esc="slno"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['reservation_seq']"/>
+                                            </td>
+                                            <td>
+                                                 <span t-esc="rec['name']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['create_date']"/>
+                                            </td>
+                                            <td>
+                                                <span t-esc="rec['state']"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
                     </div>
                 </t>
             </t>

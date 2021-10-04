@@ -5,7 +5,6 @@ class ResearchScholar(models.Model):
     _name = "research.scholar"
     _description = "scholar"
     _rec_name = "f_name"
-    _rec_name = "partner_id"
 
     unique_id = fields.Integer(string="Scholar Id")
     _sql_constraints = [('field_unique', 'unique(scholar_id)',
