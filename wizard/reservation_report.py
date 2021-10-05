@@ -1,12 +1,12 @@
-import xlsxwriter
-from xlrd import sheet
-from xlsxwriter import workbook
-
-from odoo import models, fields
 from odoo.exceptions import UserError
-from odoo.tools import json, date_utils
-from json import *
+import json
 import io
+from odoo import fields, models
+from odoo.tools import date_utils
+try:
+    from odoo.tools.misc import xlsxwriter
+except ImportError:
+    import xlsxwriter
 
 
 class ReservationReport(models.TransientModel):
@@ -34,8 +34,8 @@ class ReservationReport(models.TransientModel):
                 ' s.partner_id = r.id'
 
         if self.customer_id and self.from_date and self.to_date:
-            query = query + " where s.partner_id = '%d' and b.create_date>'%s'" \
-                            "and b.create_date<'%s'" % (self.customer_id,
+            query = query + " where s.partner_id = '%d' and b.create_date>" \
+                            "'%s'and b.create_date<'%s'" % (self.customer_id,
                                                         self.from_date,
                                                         self.to_date)
         elif self.customer_id:
@@ -54,6 +54,7 @@ class ReservationReport(models.TransientModel):
         self.env.cr.execute(query)
         result = self.env.cr.dictfetchall()
         print(result)
+        print(self.read())
         data = {
             'form': self.read()[0],
             'record': result,
@@ -78,8 +79,8 @@ class ReservationReport(models.TransientModel):
                 ' s.partner_id = r.id'
 
         if self.customer_id and self.from_date and self.to_date:
-            query = query + " where s.partner_id = '%d' and b.create_date>'%s'" \
-                            "and b.create_date<'%s'" % (self.customer_id,
+            query = query + " where s.partner_id = '%d' and b.create_date>" \
+                            "'%s' and b.create_date<'%s'" % (self.customer_id,
                                                         self.from_date,
                                                         self.to_date)
         elif self.customer_id:
@@ -100,14 +101,10 @@ class ReservationReport(models.TransientModel):
         result = self.env.cr.dictfetchall()
         print(result)
         data = {
-            'id': self.id,
-            'model': self._name,
-            'from': self.from_date,
+            'from_date': self.from_date,
             'to_date': self.to_date,
-            'table_data': result,
-            'form': self.read()[0],
+            'record': result
         }
-        print(data)
         return {
             'type': 'ir.actions.report',
             'data': {'model': 'reservation.report',
@@ -123,210 +120,64 @@ class ReservationReport(models.TransientModel):
 
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-        user_obj = self.env.user
-        sheet = workbook.add_worksheet('Book Reservation Report')
-        heading = workbook.add_format(
-            {'font_size': 20, 'align': 'center', 'bold': True,
-             'bg_color': '#D3D3D3', 'border': 1})
+        sheet = workbook.add_worksheet()
+        cell_format = workbook.add_format({'font_size': '12px'})
+        head = workbook.add_format(
+            {'align': 'center', 'bold': True, 'font_size': '20px'})
+        txt = workbook.add_format({'font_size': '10px'})
+        sheet.merge_range('B2:I3', 'Book Reservation Report', head)
+        sheet.write('B6', 'From:', cell_format)
+        sheet.merge_range('C6:D6', data['from_date'], txt)
+        sheet.write('F6', 'To:', cell_format)
+        sheet.merge_range('G6:H6', data['to_date'], txt)
+        # heading = workbook.add_format(
+        #     {'font_size': 20, 'align': 'center', 'bold': True,
+        #      'bg_color': '#051937', 'border': 1})
+        # format1 = workbook.add_format(
+        #     {'font_size': 10, 'align': 'left'})
+        # heading = workbook.add_format(
+        #     {'font_size': 20, 'align': 'center', 'bold': True,
+        #      'bg_color': '#6BA6FE', 'border': 1})
         format1 = workbook.add_format(
             {'font_size': 10, 'align': 'left'})
-        heading = workbook.add_format(
-            {'font_size': 20, 'align': 'center', 'bold': True,
-            'bg_color': '#D3D3D3', 'border': 1})
-        format1 = workbook.add_format(
-            {'font_size': 10, 'align': 'left'})
-            format2 = workbook.add_format(
+        format2 = workbook.add_format(
             {'font_size': 10, 'align': 'left', 'bold': True,
-            'bg_color': '#D3D3D3', 'border': 1})
-        sheet.set_column(0, 9, 20)
-        sheet.write('B2', user_obj.company_id.name, format1)
-        sheet.write('B3', user_obj.company_id.street, format1)
-        sheet.write('B4', user_obj.company_id.city, format1)
-        sheet.write('B5', user_obj.company_id.zip, format1)
-        sheet.write('B6', user_obj.company_id.state_id.name, format1)
-        sheet.write('B7', user_obj.company_id.country_id.name, format1)
-        sheet.merge_range('B8:G9', "Accomodation Report", heading)
+             'bg_color': '#6BA6FE', 'border': 1})
 
-        if data['start_date']:
-            sheet.write('B12', "Date From:", format2)
-            sheet.write('C12', data['start_date'], format1)
-        if data['end_date']:
-            sheet.write('B13', "Date To:", format2)
-            sheet.write('C13', data['end_date'], format1)
-        if data['guest_id']:
-            sheet.write('B14', 'Guest:', format2)
-            sheet.write('C14', data['guest_id'], format1)
-        if not data['start_date'] & data['end_date']:
-            sheet.write('B13', "Date:", format2)
-            sheet.write('C13', data['today_date'], format1)
-
-        row = 15
+        row = 8
         col = 1
         sheet.write(row, col, 'Sl No.', format2)
         col += 1
         sheet.write(row, col, 'Reference', format2)
         col += 1
-        sheet.write(row, col, 'Room No', format2)
+        sheet.write(row, col, 'Book', format2)
         col += 1
-        sheet.write(row, col, 'Check In', format2)
+        sheet.write(row, col, 'Reserved Date', format2)
         col += 1
-        sheet.write(row, col, 'Check Out', format2)
+        sheet.write(row, col, 'Customer', format2)
         col += 1
-        if not data['guest_id']:
-            sheet.write(row, col, 'Guest', format2)
+        sheet.write(row, col, 'Status', format2)
         col += 1
-        row_number = 16
+        row_number = 9
         i = 0
-        for val in data['table_data']:
+        for val in data['record']:
             column_number = 1
             i += 1
-            sheet.write(row_number, column_number, i,
-                    format1)
+            sheet.write(row_number, column_number, i, format1)
             column_number += 1
-            sheet.write(row_number, column_number, val['accomodation_id'],
+            sheet.write(row_number, column_number, val['reservation_seq'],
                         format1)
             column_number += 1
-            sheet.write(row_number, column_number, val['room_no'], format1)
+            sheet.write(row_number, column_number, val['name'], format1)
             column_number += 1
-            sheet.write(row_number, column_number, val['check_in'], format1)
+            sheet.write(row_number, column_number, val['create_date'], format1)
             column_number += 1
-            sheet.write(row_number, column_number, val['check_out'], format1)
+            sheet.write(row_number, column_number, val['display_name'], format1)
             column_number += 1
-
-
-"""--------------------------------------------------------------------------"""
-
-
-
-
-
-# def print_xlsx(self):
-#     guest_id = self.guest_id.id
-#     from_date = self.from_date
-#     to_date = self.to_date
-#     today_date = self.today_date
-#     print(today_date)
-#
-#
-#     query = 'SELECT acc.accomodation_id,acc.check_in,acc.check_out,' \
-#             'res.name,num.room_no  FROM hotel_accomodation acc INNER JOIN ' \
-#             'res_partner res ON (acc.guest_id = res.id) ' \
-#             'INNER JOIN hotel_number num ON acc.room_id = num.id'
-#     if guest_id and from_date and to_date:
-#         query = query + " where guest_id = '%d'and check_in>'%s' and " \
-#                         "check_out <'%s'" % (guest_id, from_date, to_date)
-#     elif guest_id and from_date:
-#         query = query + " where guest_id = '%d' and check_in>'%s'" % (
-#             guest_id, from_date)
-#     elif guest_id and to_date:
-#         query = query + " where guest_id = '%d' and check_out<'%s'" % (
-#             guest_id, to_date)
-#     elif from_date and to_date:
-#         query = query + " where check_in >'%s' and check_out<'%s'" % (
-#             from_date, to_date)
-#     elif from_date:
-#         query = query + " where check_in>'%s'" % (from_date)
-#     elif to_date:
-#         query = query + " where check_out<'%s'" % (to_date)
-#     elif guest_id:
-#         query = query + " where guest_id ='%d'" % (guest_id)
-#     self.env.cr.execute(query)
-#     result = self.env.cr.dictfetchall()
-#     print(result)
-#     data = {
-#         'id': self.id,
-#         'model': self._name,
-#         'start_date': self.from_date,
-#         'end_date': self.to_date,
-#         'today_date':self.today_date,
-#         'guest_id': self.guest_id.name,
-#         'table_data': result,
-#         'form': self.read()[0],
-#     }
-#     print(data)
-#     return {
-#         'type': 'ir.actions.report',
-#         'data': {'model': 'hotel.generate.report.wizard',
-#                  'options': json.dumps(data,
-#                                        default=date_utils.json_default),
-#                  'output_format': 'xlsx',
-#                  'report_name': 'Excel Report',
-#                  },
-#         'report_type': 'xlsx',
-#     }
-#
-# def get_xlsx_report(self, data, response):
-#
-#     output = io.BytesIO()
-#     workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-#     user_obj = self.env.user
-#     sheet = workbook.add_worksheet('Hotel Accomodation Report')
-#     heading = workbook.add_format(
-#         {'font_size': 20, 'align': 'center', 'bold': True,
-#          'bg_color': '#D3D3D3','border': 1})
-#     format1 = workbook.add_format(
-#         {'font_size': 10, 'align': 'left'})
-# heading = workbook.add_format(
-#     {'font_size': 20, 'align': 'center', 'bold': True,
-#      'bg_color': '#D3D3D3','border': 1})
-# format1 = workbook.add_format(
-#     {'font_size': 10, 'align': 'left'})
-# format2 = workbook.add_format(
-#     {'font_size': 10, 'align': 'left', 'bold': True,
-#      'bg_color': '#D3D3D3','border': 1})
-#
-#
-# sheet.set_column(0, 9, 20)
-# sheet.write('B2', user_obj.company_id.name, format1)
-# sheet.write('B3', user_obj.company_id.street, format1)
-# sheet.write('B4', user_obj.company_id.city, format1)
-# sheet.write('B5', user_obj.company_id.zip, format1)
-# sheet.write('B6', user_obj.company_id.state_id.name, format1)
-# sheet.write('B7', user_obj.company_id.country_id.name, format1)
-# sheet.merge_range('B8:G9', "Accomodation Report", heading)
-#
-# if data['start_date']:
-#     sheet.write('B12', "Date From:", format2)
-#     sheet.write('C12', data['start_date'], format1)
-# if data['end_date']:
-#     sheet.write('B13', "Date To:", format2)
-#     sheet.write('C13', data['end_date'], format1)
-# if data['guest_id']:
-#     sheet.write('B14', 'Guest:', format2)
-#     sheet.write('C14', data['guest_id'], format1)
-# if not data['start_date'] & data['end_date']:
-#     sheet.write('B13', "Date:", format2)
-#     sheet.write('C13', data['today_date'], format1)
-#
-# row = 15
-# col = 1
-# sheet.write(row, col, 'Sl No.', format2)
-# col += 1
-# sheet.write(row, col, 'Reference', format2)
-# col += 1
-# sheet.write(row, col, 'Room No', format2)
-# col += 1
-# sheet.write(row, col, 'Check In', format2)
-# col += 1
-# sheet.write(row, col, 'Check Out', format2)
-# col += 1
-# if not data['guest_id']:
-#     sheet.write(row, col, 'Guest', format2)
-# col += 1
-# row_number = 16
-# i = 0
-# for val in data['table_data']:
-#     column_number = 1
-#     i += 1
-#     sheet.write(row_number, column_number, i,
-#                 format1)
-#     column_number += 1
-#     sheet.write(row_number, column_number, val['accomodation_id'],
-#                 format1)
-#     column_number += 1
-#     sheet.write(row_number, column_number, val['room_no'], format1)
-#     column_number += 1
-#     sheet.write(row_number, column_number, val['check_in'], format1)
-#     column_number += 1
-#     sheet.write(row_number, column_number, val['check_out'], format1)
-#     column_number += 1
+            sheet.write(row_number, column_number, val['state'], format1)
+            column_number += 1
+            row_number += 1
+        workbook.close()
+        output.seek(0)
+        response.stream.write(output.read())
+        output.close()

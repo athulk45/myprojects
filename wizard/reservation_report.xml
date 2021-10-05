@@ -16,7 +16,7 @@
                     <field name="to_date"/>
                 </group>
                 <footer>
-                    <button name="get_report" string="Print"
+                    <button name="get_report" string="PDF Report"
                             type="object" class="btn-primary"/>
                     <button name="get_excel_report" string="Excel Report"
                             type="object" class="btn-primary"/>
@@ -32,5 +32,14 @@
         <field name="view_id" ref="report_view"/>
         <field name="target">new</field>
     </record>
+<!--    <record id="action_xlsx_report" model="ir.actions.act_window">-->
+<!--        <field name="name">Excel</field>-->
+<!--        <field name="res_model">example.xlsx.report.wizard</field>-->
+<!--        <field name="type">ir.actions.act_window</field>-->
+<!--        <field name="view_mode">form</field>-->
+<!--        <field name="target">new</field>-->
+<!--    </record>-->
+<!--    <menuitem id="excel_report" name="Excel Report"-->
+<!--               parent="stock.menu_warehouse_report" action="action_xlsx_report"/>-->
 
 </odoo>

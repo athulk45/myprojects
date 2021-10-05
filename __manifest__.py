@@ -17,6 +17,7 @@
              'security/scholar_security.xml',
              'views/scholar_view.xml',
              'views/book_view.xml',
+             'views/action_manager.xml',
              'wizard/reservation_report.xml',
              'report/report.xml',
              'report/reservation_template.xml',
