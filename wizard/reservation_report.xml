@@ -32,14 +32,4 @@
         <field name="view_id" ref="report_view"/>
         <field name="target">new</field>
     </record>
-<!--    <record id="action_xlsx_report" model="ir.actions.act_window">-->
-<!--        <field name="name">Excel</field>-->
-<!--        <field name="res_model">example.xlsx.report.wizard</field>-->
-<!--        <field name="type">ir.actions.act_window</field>-->
-<!--        <field name="view_mode">form</field>-->
-<!--        <field name="target">new</field>-->
-<!--    </record>-->
-<!--    <menuitem id="excel_report" name="Excel Report"-->
-<!--               parent="stock.menu_warehouse_report" action="action_xlsx_report"/>-->
-
 </odoo>

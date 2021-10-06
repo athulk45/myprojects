@@ -125,35 +125,30 @@ class ReservationReport(models.TransientModel):
         head = workbook.add_format(
             {'align': 'center', 'bold': True, 'font_size': '20px'})
         txt = workbook.add_format({'font_size': '10px'})
-        sheet.merge_range('B2:I3', 'Book Reservation Report', head)
+        sheet.merge_range('B2:J3', 'Book Reservation Report', head)
         sheet.write('B6', 'From:', cell_format)
         sheet.merge_range('C6:D6', data['from_date'], txt)
-        sheet.write('F6', 'To:', cell_format)
-        sheet.merge_range('G6:H6', data['to_date'], txt)
-        # heading = workbook.add_format(
-        #     {'font_size': 20, 'align': 'center', 'bold': True,
-        #      'bg_color': '#051937', 'border': 1})
-        # format1 = workbook.add_format(
-        #     {'font_size': 10, 'align': 'left'})
-        # heading = workbook.add_format(
-        #     {'font_size': 20, 'align': 'center', 'bold': True,
-        #      'bg_color': '#6BA6FE', 'border': 1})
+        sheet.write('H6', 'To:', cell_format)
+        sheet.merge_range('I6:J6', data['to_date'], txt)
         format1 = workbook.add_format(
             {'font_size': 10, 'align': 'left'})
         format2 = workbook.add_format(
-            {'font_size': 10, 'align': 'left', 'bold': True,
+            {'font_size': 10, 'align': 'center', 'bold': True,
              'bg_color': '#6BA6FE', 'border': 1})
 
         row = 8
-        col = 1
+        col = 2
         sheet.write(row, col, 'Sl No.', format2)
         col += 1
         sheet.write(row, col, 'Reference', format2)
         col += 1
+        # sheet.merge_range('D9:E9', 'Book', format2)
         sheet.write(row, col, 'Book', format2)
         col += 1
+        # sheet.merge_range('F9:G9', 'Reserved Date', format2)
         sheet.write(row, col, 'Reserved Date', format2)
         col += 1
+        # sheet.merge_range('H9:I9', 'Customer', format2)
         sheet.write(row, col, 'Customer', format2)
         col += 1
         sheet.write(row, col, 'Status', format2)
@@ -161,7 +156,7 @@ class ReservationReport(models.TransientModel):
         row_number = 9
         i = 0
         for val in data['record']:
-            column_number = 1
+            column_number = 2
             i += 1
             sheet.write(row_number, column_number, i, format1)
             column_number += 1
