@@ -16,6 +16,7 @@ class ReservationReport(models.TransientModel):
     customer_id = fields.Many2one('res.partner', string="Customer")
     from_date = fields.Date(string="Date From")
     to_date = fields.Date(string="From To")
+    today_date = fields.Date(default=fields.Date.today())
 
     def get_report(self):
         print(self.from_date)
@@ -101,6 +102,8 @@ class ReservationReport(models.TransientModel):
         result = self.env.cr.dictfetchall()
         print(result)
         data = {
+            'cust': self.customer_id.name,
+            'today_date': self.today_date,
             'from_date': self.from_date,
             'to_date': self.to_date,
             'record': result
@@ -124,12 +127,19 @@ class ReservationReport(models.TransientModel):
         cell_format = workbook.add_format({'font_size': '12px'})
         head = workbook.add_format(
             {'align': 'center', 'bold': True, 'font_size': '20px'})
-        txt = workbook.add_format({'font_size': '10px'})
-        sheet.merge_range('B2:J3', 'Book Reservation Report', head)
-        sheet.write('B6', 'From:', cell_format)
-        sheet.merge_range('C6:D6', data['from_date'], txt)
-        sheet.write('H6', 'To:', cell_format)
-        sheet.merge_range('I6:J6', data['to_date'], txt)
+        txt = workbook.add_format({'font_size': '10px','align': 'center'})
+        sheet.merge_range('B2:I3', 'Book Reservation Report', head)
+        if data['from_date'] and data['to_date']:
+            sheet.write('B6', 'From:', cell_format)
+            sheet.merge_range('C6:D6', data['from_date'], txt)
+            sheet.write('G6', 'To:', cell_format)
+            sheet.merge_range('H6:I6', data['to_date'], txt)
+        else:
+            print("hi")
+            sheet.write('E5', 'Date:', cell_format)
+            sheet.merge_range('F5:G5', data['today_date'], txt)
+        if data['cust']:
+            sheet.merge_range('E7:F7', data['cust'], txt)
         format1 = workbook.add_format(
             {'font_size': 10, 'align': 'left'})
         format2 = workbook.add_format(
@@ -149,8 +159,9 @@ class ReservationReport(models.TransientModel):
         sheet.write(row, col, 'Reserved Date', format2)
         col += 1
         # sheet.merge_range('H9:I9', 'Customer', format2)
-        sheet.write(row, col, 'Customer', format2)
-        col += 1
+        if not data['cust']:
+            sheet.write(row, col, 'Customer', format2)
+            col += 1
         sheet.write(row, col, 'Status', format2)
         col += 1
         row_number = 9
@@ -167,8 +178,10 @@ class ReservationReport(models.TransientModel):
             column_number += 1
             sheet.write(row_number, column_number, val['create_date'], format1)
             column_number += 1
-            sheet.write(row_number, column_number, val['display_name'], format1)
-            column_number += 1
+            if not data['cust']:
+                print("yes")
+                sheet.write(row_number, column_number, val['display_name'], format1)
+                column_number += 1
             sheet.write(row_number, column_number, val['state'], format1)
             column_number += 1
             row_number += 1
